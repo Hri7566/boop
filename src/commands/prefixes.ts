@@ -1,1 +1,1 @@
-export const prefixes: string[] = ["."];
+export const prefixes: string[] = ["/"];

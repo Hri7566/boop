@@ -1,6 +1,5 @@
 import { formatItem, getInventory } from "../../../data/inventory";
 import { runItemBehavior } from "../../../items";
-import { buyItem, shopItems } from "../../../shop";
 import { Command } from "../../Command";
 
 export const eat = new Command(
@@ -11,7 +10,7 @@ export const eat = new Command(
     async (msg, bot) => {
         const inv = await getInventory(msg.p._id);
 
-        if (!msg.args[1]) return `Specify an item to buy.`;
+        if (!msg.args[1]) return `Specify an item to eat.`;
 
         let item;
 
