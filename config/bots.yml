@@ -1,0 +1,5 @@
+- uri: wss://mppclone.com:8443
+  channel: ":skul:"
+  name: beep boop 🤖 /help
+  color: "#480505"
+  tokenGroup: MPPNET
