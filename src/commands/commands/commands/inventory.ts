@@ -10,7 +10,7 @@ export const inventory = new Command(
     "inventory",
     ["inventory", "inv"],
     "Get your own (or someone else's) inventory",
-    "inventory [user ID]",
+    "inventory [user]",
     async (msg, bot) => {
         if (msg.args[1]) {
             const p = bot.fuzzyFind(msg.args[1]);

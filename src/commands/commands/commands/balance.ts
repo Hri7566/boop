@@ -5,7 +5,7 @@ export const balance = new Command(
     "balance",
     ["balance", "bal"],
     "Get your own (or someone else's) balance",
-    "balance [user ID]",
+    "balance [user]",
     async (msg, bot) => {
         if (msg.args[1]) {
             const p = bot.fuzzyFind(msg.args[1]);
