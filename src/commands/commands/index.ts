@@ -9,7 +9,9 @@ import { id } from "./commands/id";
 import { inventory } from "./commands/inventory";
 import { money } from "./commands/money";
 import { shop } from "./commands/shop";
+import { stopworking } from "./commands/stopworking";
 import { unfollow } from "./commands/unfollow";
+import { work } from "./commands/work";
 
 export const commands: Command[] = [
     help,
@@ -18,9 +20,10 @@ export const commands: Command[] = [
     follow,
     balance,
     inventory,
-    money,
     shop,
     buy,
     eat,
-    unfollow
+    unfollow,
+    work,
+    stopworking
 ];

@@ -1,6 +1,7 @@
 import { Client } from "mpp-client-net";
 import CommandHandler from "../commands";
 import { Cursor } from "./Cursor";
+import { RateLimitChain } from "../util/RateLimit";
 
 export class Bot {
     public cursor = new Cursor(this);
@@ -31,8 +32,6 @@ export class Bot {
         });
 
         this.client.on("a", async msg => {
-            console.log(`${msg.p.name}: ${msg.a}`);
-
             try {
                 const out = await CommandHandler.handleCommand(this, msg);
                 if (out) this.sendChat(out);
@@ -65,12 +64,26 @@ export class Bot {
         }
     }
 
+    public chatRateLimit = new RateLimitChain(4, 6000);
+
     public sendChat(text: string) {
-        this.client.sendArray([
-            {
-                m: "a",
-                message: `\u034f${text.substring(0, 512)}`
-            }
-        ]);
+        if (!this.chatRateLimit.attempt()) {
+            setTimeout(() => {
+                this.sendChat(text);
+            }, 1000);
+        } else {
+            this.client.sendArray([
+                {
+                    m: "a",
+                    message: `\u034f${text.substring(0, 512)}`
+                }
+            ]);
+        }
+    }
+
+    public fuzzyFind(text: string) {
+        for (const p of Object.values(this.client.ppl)) {
+            if (p.name.toLowerCase().includes(text.toLowerCase()) || p._id.toLowerCase().includes(text.toLowerCase())) return p;
+        }
     }
 }

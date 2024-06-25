@@ -11,12 +11,11 @@ export const follow = new Command(
             return `See \`${msg.usedPrefix}help follow\` for usage.`;
 
         const followID = msg.args[1];
-
-        let p = Object.values(bot.client.ppl).find(p => p._id == followID);
+        const p = bot.fuzzyFind(followID);
         if (!p) return `That user is not here.`;
 
-        bot.cursor.followID = followID;
-        db.put("cursor.followID", followID);
+        bot.cursor.followID = p._id;
+        db.put("cursor.followID", p._id);
 
         return `Now following @${p._id}.`;
     }

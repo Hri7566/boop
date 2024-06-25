@@ -1,35 +1,50 @@
-import { formatBalance } from "../data/balance";
+import { addBalance, formatBalance } from "../data/balance";
+import type Bot from "../mpp";
 
-export const workingUsers: string[] = [];
+export interface WorkUser {
+    uid: string;
+    bot: Bot;
+}
 
-export function startWorking(uid: string) {
+export const workingUsers: WorkUser[] = [];
+
+export function startWorking(uid: string, bot: Bot) {
     if (isWorking(uid)) return `You are already working.`;
 
-    workingUsers.push(uid);
+    workingUsers.push({ uid, bot });
+
+    return "You started working.";
 }
 
 export function isWorking(uid: string) {
-    if (workingUsers.includes(uid)) {
-        return true;
-    }
-
-    return false;
+    return !!workingUsers.find(w => w.uid == uid);
 }
 
-export function finishWorking(uid: string) {
+export async function finishWorking(uid: string, bot?: Bot) {
     const money = parseFloat((Math.random() * 100).toFixed(2));
 
     stopWorking(uid);
+    await addBalance(uid, money);
 
-    return `@${uid} finished working and earned ${formatBalance(money)}.`;
+    const out = `@${uid} finished working and earned ${formatBalance(money)}.`;
+
+    if (bot) bot.sendChat(out);
+
+    return out;
 }
 
-export function stopWorking(uid: string) {}
+export function stopWorking(uid: string) {
+    if (!isWorking(uid)) return "You are not working.";
+    const workUser = workingUsers.find(w => w.uid == uid);
+    if (!workUser) return "You are not working.";
+    workingUsers.splice(workingUsers.indexOf(workUser), 1);
+    return "You stopped working.";
+}
 
-let workingInterval: NodeJS.Timer;
+let workingInterval: Timer;
 
 export function startWorkingInterval() {
-    setInterval(() => {
+    workingInterval = setInterval(async () => {
         if (workingUsers.length < 1) return;
 
         const r = Math.random();
@@ -38,7 +53,7 @@ export function startWorkingInterval() {
             const winner =
                 workingUsers[Math.floor(Math.random() * workingUsers.length)];
 
-            finishWorking(winner);
+            await finishWorking(winner.uid, winner.bot);
         }
     }, 5000);
 }

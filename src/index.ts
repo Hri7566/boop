@@ -3,6 +3,9 @@ import Bot from "./mpp";
 import { env } from "./env";
 import { prefixes } from "./commands/prefixes";
 import { loadConfig } from "./util/config";
+import { startWorkingInterval } from "./work";
+
+startWorkingInterval();
 
 const tokenGroups = new Map();
 tokenGroups.set("MPPNET", env.MPPNET_TOKEN);
@@ -18,7 +21,7 @@ interface BotConfig {
 const configs = loadConfig<BotConfig[]>("./config/bots.yml", [
     {
         uri: "wss://mppclone.com:8443",
-        channel: ":skul:",
+        channel: "shard(t)",
         name: "beep boop 🤖 " + prefixes[0] + "help",
         color: "#480505",
         tokenGroup: "MPPNET"
@@ -35,7 +38,5 @@ for (const config of configs) {
     });
 
     bot.start();
-
     bots.push(bot);
 }
-

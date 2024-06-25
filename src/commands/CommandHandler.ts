@@ -74,7 +74,7 @@ export class CommandHandler {
             foundCommand = command;
         }
 
-        if (!foundCommand) return `No such command: \`${usedCommand}\``;
+        if (!foundCommand) return; // `No such command: \`${usedCommand}\``;
 
         // TODO check permissions
 
