@@ -46,7 +46,7 @@ export function formatInventory(inv: TInventory) {
         items.push(formatItem(item));
     }
 
-    return items.join(` | `);
+    return items.join(` | `) || "(none)";
 }
 
 export function compactInventory(inv: TInventory) {
